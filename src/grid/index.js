@@ -58,12 +58,16 @@ class Grid extends Component {
       characters: [],
       selectedCharacter: {},
       nextPageURL: null,
-      prevPageURL: null
+      prevPageURL: null,
+      clicks: 0
     };
   }
 
   selectCharacter(character) {
     this.setState({ selectedCharacter: character });
+    this.setState((prevState) => ({
+      clicks: prevState.clicks + 1
+    }));
   };
 
   async newPage(pageURL) {
@@ -76,13 +80,15 @@ class Grid extends Component {
 
   async componentDidMount() {
     const data = await getData();
-    console.log(data)
+
     this.setState({ characters: data.results });
     this.setState({ nextPageURL: data.next });
   }
 
   render() {
-    const { characters, selectedCharacter, nextPageURL, prevPageURL } = this.state;
+    const { 
+      characters, selectedCharacter, nextPageURL, prevPageURL, clicks
+    } = this.state;
     const { classes } = this.props;
 
     return (
@@ -106,11 +112,12 @@ class Grid extends Component {
           </Button>
         </div>
         <GridList cols={4} cellHeight={300} className={classes.gridList}>
-          {characters.map((character, index) => (
-            <GridListTile key={index} >
+          {characters.map((character) => (
+            <GridListTile key={character.name} >
               <img src={noImage} alt={character.name} />
               <GridListTileBar
                 title={character.name}
+                subtitle={`Viewed ${clicks}`}
                 actionIcon={
                   <IconButton className={classes.icon} onClick={()=> this.selectCharacter(character)}>
                     <InfoIcon />

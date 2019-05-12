@@ -55,7 +55,6 @@ class SimpleModal extends React.Component {
   render() {
     const { classes } = this.props;
     const { character } = this.state;
-    console.log(character)
 
     return (
       <div>
